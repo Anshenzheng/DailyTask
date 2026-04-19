@@ -86,8 +86,8 @@
                 [min]="0" 
                 [max]="100" 
                 [step]="10"
-                [value]="element.progress"
-                (change)="updateTaskProgress(element, $event.value)"
+                [(ngModel)]="element.progress"
+                (dragEnd)="onProgressDragEnd(element)"
                 class="progress-slider"
               >
               </mat-slider>

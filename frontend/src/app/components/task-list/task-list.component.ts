@@ -122,6 +122,10 @@ export class TaskListComponent implements OnInit {
     });
   }
 
+  onProgressDragEnd(task: Task): void {
+    this.updateTaskProgress(task, task.progress);
+  }
+
   getTemplateName(templateId: number): string {
     const template = this.templates.find(t => t.id === templateId);
     return template ? template.name : '未知模板';

@@ -6,6 +6,18 @@ export interface TaskTemplate {
   updatedAt: Date;
 }
 
+export interface FieldRequest {
+  id?: number;
+  fieldName: string;
+  fieldLabel: string;
+  fieldType: string;
+  maxLength?: number;
+  required: boolean;
+  sortOrder: number;
+  defaultValue?: string;
+  options?: string;
+}
+
 export interface TemplateField {
   id: number;
   templateId: number;
