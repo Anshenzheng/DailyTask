@@ -1,52 +1,61 @@
-<div class="container">
-  <mat-card class="card" *ngIf="!loading">
+<div class="layout-container">
+  <mat-card class="page-card" *ngIf="!loading">
     <mat-card-header>
       <mat-card-title>{{ isEdit ? '编辑模板' : '新建模板' }}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="templateForm" (ngSubmit)="onSubmit()">
-        <div class="form-row">
-          <mat-form-field appearance="outline">
-            <mat-label>模板名称</mat-label>
-            <input matInput formControlName="name" required maxlength="200">
-            <mat-error *ngIf="templateForm.get('name')?.invalid">
-              请输入有效的模板名称
-            </mat-error>
-          </mat-form-field>
-        </div>
+        <mat-form-field appearance="outline" class="form-section">
+          <mat-label>模板名称</mat-label>
+          <input matInput formControlName="name" required maxlength="200">
+          <mat-error *ngIf="templateForm.get('name')?.invalid">
+            请输入有效的模板名称
+          </mat-error>
+        </mat-form-field>
 
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="form-section">
           <mat-label>模板描述</mat-label>
           <textarea matInput formControlName="description" rows="2" maxlength="500"></textarea>
         </mat-form-field>
 
-        <div class="section-divider">
-          <span>字段定义</span>
-          <button mat-stroked-button type="button" color="primary" (click)="addField()">
-            <mat-icon>add</mat-icon> 添加字段
+        <div class="card-header">
+          <h3 class="form-section-title">字段定义</h3>
+          <button mat-raised-button type="button" color="primary" (click)="addField()">
+            <mat-icon>add</mat-icon>
+            添加字段
           </button>
         </div>
 
         <div formArrayName="fields">
-          <div *ngFor="let field of fields.controls; let i = index" class="field-editor">
-            <div class="field-editor-header">
-              <span>字段 {{ i + 1 }}</span>
-              <span class="field-type-badge">{{ getFieldTypeLabel(field.get('fieldType')?.value) }}</span>
+          <mat-card *ngFor="let field of fields.controls; let i = index" 
+                    class="field-editor-card">
+            <mat-card-header style="margin-bottom: 16px;">
+              <mat-card-title style="font-size: 15px;">
+                字段 {{ i + 1 }} - {{ getFieldTypeLabel(field.get('fieldType')?.value) }}
+              </mat-card-title>
               <div>
-                <button mat-icon-button type="button" [disabled]="i === 0" (click)="moveFieldUp(i)">
+                <button mat-icon-button type="button" 
+                        [disabled]="i === 0" 
+                        (click)="moveFieldUp(i)"
+                        matTooltip="上移">
                   <mat-icon>arrow_upward</mat-icon>
                 </button>
-                <button mat-icon-button type="button" [disabled]="i === fields.length - 1" (click)="moveFieldDown(i)">
+                <button mat-icon-button type="button" 
+                        [disabled]="i === fields.length - 1" 
+                        (click)="moveFieldDown(i)"
+                        matTooltip="下移">
                   <mat-icon>arrow_downward</mat-icon>
                 </button>
-                <button mat-icon-button type="button" color="warn" (click)="removeField(i)">
+                <button mat-icon-button type="button" 
+                        color="warn" 
+                        (click)="removeField(i)"
+                        matTooltip="删除">
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>
-            </div>
-
-            <div [formGroupName]="i">
-              <div class="form-row">
+            </mat-card-header>
+            <mat-card-content>
+              <div [formGroupName]="i" class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>字段名</mat-label>
                   <input matInput formControlName="fieldName" required>
@@ -55,9 +64,6 @@
                   <mat-label>显示标签</mat-label>
                   <input matInput formControlName="fieldLabel" required>
                 </mat-form-field>
-              </div>
-
-              <div class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>字段类型</mat-label>
                   <mat-select formControlName="fieldType">
@@ -71,33 +77,34 @@
                   <input matInput type="number" formControlName="maxLength">
                 </mat-form-field>
               </div>
-
-              <div class="form-row">
+              <div [formGroupName]="i" class="form-row">
                 <mat-form-field appearance="outline">
                   <mat-label>默认值</mat-label>
                   <input matInput formControlName="defaultValue">
                 </mat-form-field>
-                <mat-form-field appearance="outline" *ngIf="field.get('fieldType')?.value === 'select'">
+                <mat-form-field appearance="outline" 
+                              *ngIf="field.get('fieldType')?.value === 'select'">
                   <mat-label>选项（逗号分隔）</mat-label>
                   <input matInput formControlName="options" placeholder="选项1,选项2,选项3">
                 </mat-form-field>
               </div>
-
-              <div class="checkbox-row">
+              <div [formGroupName]="i">
                 <mat-checkbox formControlName="required">必填字段</mat-checkbox>
               </div>
-            </div>
-          </div>
+            </mat-card-content>
+          </mat-card>
         </div>
 
-        <div *ngIf="fields.length === 0" class="empty-fields">
-          <p>尚未添加任何字段，点击上方"添加字段"按钮开始创建。</p>
+        <div *ngIf="fields.length === 0" class="empty-state">
+          <mat-icon class="empty-state-icon">dynamic_form</mat-icon>
+          <p>尚未添加任何字段</p>
+          <p style="font-size: 13px; margin-top: 8px;">点击上方"添加字段"按钮开始创建</p>
         </div>
 
-        <div class="button-row">
+        <div class="form-actions">
           <button mat-raised-button color="primary" type="submit" [disabled]="submitting">
-            <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
-            {{ submitting ? '保存中...' : '保存' }}
+            <span *ngIf="submitting">保存中...</span>
+            <span *ngIf="!submitting">{{ isEdit ? '更新' : '保存' }}</span>
           </button>
           <button mat-stroked-button type="button" (click)="cancel()">
             取消
@@ -107,7 +114,7 @@
     </mat-card-content>
   </mat-card>
 
-  <div *ngIf="loading" class="loading-container">
-    <mat-spinner></mat-spinner>
+  <div *ngIf="loading" class="empty-state">
+    <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
   </div>
 </div>
