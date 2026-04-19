@@ -1,28 +1,50 @@
-# Angular specific
+# ======================================
+# Angular 前端
+# ======================================
 /dist/
 /out-tsc/
-/tmp/
 /coverage/
 /e2e/test-output/
-/.angular/
 .angular/
+.ng/
+.tmp/
+.tsbuildinfo
 
-# Node modules and dependency files
-/node_modules/
-/package-lock.json
-/yarn.lock
-
-# Environment files
-/.env
-
-# Angular CLI and build artefacts
-/.angular-cli.json
-/.ng/
-
-# TypeScript cache
-*.tsbuildinfo
-
-# Logs
+# ======================================
+# Node 依赖
+# ======================================
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# ======================================
+# 环境配置
+# ======================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ======================================
+# Java 后端
+# ======================================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/application.yml
+!**/src/main/**/application.properties
+
+# ======================================
+# IDE 与系统文件
+# ======================================
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+*.swp
