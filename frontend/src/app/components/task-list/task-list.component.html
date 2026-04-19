@@ -1,17 +1,18 @@
-<div class="container">
-  <mat-card class="card">
+<div class="layout-container">
+  <mat-card class="page-card">
     <mat-card-header>
       <mat-card-title>任务管理</mat-card-title>
       <button mat-raised-button color="primary" routerLink="/tasks/new">
-        <mat-icon>add</mat-icon> 新建任务
+        <mat-icon>add</mat-icon>
+        新建任务
       </button>
     </mat-card-header>
     <mat-card-content>
-      <div class="filter-section">
+      <div class="filter-bar">
         <mat-form-field appearance="outline">
           <mat-label>选择模板</mat-label>
           <mat-select [(value)]="filterTemplateId" (selectionChange)="applyFilters()">
-            <mat-option [value]="null">全部</mat-option>
+            <mat-option [value]="null">全部模板</mat-option>
             <mat-option *ngFor="let template of templates" [value]="template.id">
               {{ template.name }}
             </mat-option>
@@ -21,124 +22,134 @@
         <mat-form-field appearance="outline">
           <mat-label>任务状态</mat-label>
           <mat-select [(value)]="filterStatus" (selectionChange)="applyFilters()">
-            <mat-option [value]="null">全部</mat-option>
+            <mat-option [value]="null">全部状态</mat-option>
             <mat-option *ngFor="let status of statuses" [value]="status.value">
               {{ status.label }}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="search-field">
-          <mat-label>搜索</mat-label>
-          <input matInput [(ngModel)]="searchKeyword" (keyup.enter)="applyFilters()" placeholder="搜索任务标题...">
+        <mat-form-field appearance="outline" style="min-width: 200px;">
+          <mat-label>搜索任务</mat-label>
+          <input matInput [(ngModel)]="searchKeyword" 
+                 (keyup.enter)="applyFilters()" 
+                 placeholder="输入标题关键词...">
           <button mat-icon-button matSuffix (click)="applyFilters()">
             <mat-icon>search</mat-icon>
           </button>
         </mat-form-field>
 
         <button mat-stroked-button (click)="clearFilters()">
-          <mat-icon>clear</mat-icon> 清除筛选
+          <mat-icon>refresh</mat-icon>
+          重置
         </button>
       </div>
 
-      <div *ngIf="loading" class="loading-container">
-        <mat-spinner diameter="30"></mat-spinner>
+      <div *ngIf="loading" class="empty-state">
+        <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
       </div>
 
-      <table mat-table [dataSource]="dataSource" matSort *ngIf="!loading">
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
-          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="title">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>任务标题</th>
-          <td mat-cell *matCellDef="let element">
-            <strong>{{ element.title }}</strong>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="template">
-          <th mat-header-cell *matHeaderCellDef>模板</th>
-          <td mat-cell *matCellDef="let element">
-            {{ getTemplateName(element.templateId) }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>状态</th>
-          <td mat-cell *matCellDef="let element">
-            <mat-form-field appearance="outline" class="inline-select">
-              <mat-select [value]="element.status" (selectionChange)="updateTaskStatus(element, $event.value)">
-                <mat-option *ngFor="let status of statuses" [value]="status.value">
-                  {{ status.label }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="progress">
-          <th mat-header-cell *matHeaderCellDef>进度</th>
-          <td mat-cell *matCellDef="let element">
-            <div class="progress-wrapper">
-              <mat-slider 
-                [min]="0" 
-                [max]="100" 
-                [step]="10"
-                [(ngModel)]="element.progress"
-                (dragEnd)="onProgressDragEnd(element)"
-                class="progress-slider"
-              >
-              </mat-slider>
-              <span class="progress-value">{{ element.progress }}%</span>
-            </div>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="dueDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>截止日期</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.dueDate ? (element.dueDate | date: 'yyyy-MM-dd') : '-' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>创建时间</th>
-          <td mat-cell *matCellDef="let element">
-            {{ element.createdAt | date: 'yyyy-MM-dd HH:mm' }}
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>操作</th>
-          <td mat-cell *matCellDef="let element">
-            <button mat-icon-button color="primary" (click)="editTask(element.id)" matTooltip="编辑">
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button mat-icon-button color="warn" (click)="deleteTask(element)" matTooltip="删除">
-              <mat-icon>delete</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-
-      <mat-paginator 
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        showFirstLastButtons
-        *ngIf="!loading"
-      ></mat-paginator>
-
       <div *ngIf="!loading && tasks.length === 0" class="empty-state">
-        <mat-icon>inbox</mat-icon>
+        <mat-icon class="empty-state-icon">assignment</mat-icon>
         <p>暂无任务</p>
         <button mat-raised-button color="primary" routerLink="/tasks/new">
           新建第一个任务
         </button>
       </div>
+
+      <mat-table [dataSource]="dataSource" matSort 
+                 *ngIf="!loading && tasks.length > 0">
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.id}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="title">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> 任务标题 </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <strong>{{element.title}}</strong>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="template">
+          <mat-header-cell *matHeaderCellDef> 模板 </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ getTemplateName(element.templateId) }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef> 状态 </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <mat-form-field appearance="fill" style="width: 120px;">
+              <mat-select [value]="element.status" 
+                          (selectionChange)="updateTaskStatus(element, $event.value)">
+                <mat-option *ngFor="let status of statuses" [value]="status.value">
+                  {{ status.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="progress">
+          <mat-header-cell *matHeaderCellDef> 进度 </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <div style="display: flex; align-items: center; gap: 12px; width: 100%;">
+              <mat-slider style="flex: 1;"
+                [min]="0" 
+                [max]="100" 
+                [step]="10"
+                [(ngModel)]="element.progress"
+                (dragEnd)="onProgressDragEnd(element)">
+              </mat-slider>
+              <span style="min-width: 45px; font-weight: 500;">
+                {{ element.progress }}%
+              </span>
+            </div>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dueDate">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> 截止日期 </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ element.dueDate ? (element.dueDate | date: 'yyyy-MM-dd') : '-' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> 创建时间 </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            {{ element.createdAt | date: 'yyyy-MM-dd HH:mm' }}
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef> 操作 </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <button mat-icon-button color="primary" 
+                    (click)="editTask(element.id)" 
+                    matTooltip="编辑">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" 
+                    (click)="deleteTask(element)" 
+                    matTooltip="删除">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+
+      <mat-paginator 
+        [pageSizeOptions]="[10, 25, 50, 100]"
+        [pageSize]="10"
+        showFirstLastButtons
+        *ngIf="!loading && tasks.length > 0">
+      </mat-paginator>
     </mat-card-content>
   </mat-card>
 </div>

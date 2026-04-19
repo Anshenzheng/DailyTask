@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TemplateField, TaskStatuses, TaskTemplate } from '../../models';
+import { TemplateField, TaskData, TaskStatuses, TaskTemplate } from '../../models';
 import { TemplateService } from '../../services/template.service';
 import { TaskService } from '../../services/task.service';
 import { DynamicFormComponent } from '../dynamic-form/dynamic-form.component';
@@ -18,6 +18,7 @@ export class TaskEditComponent implements OnInit {
   templates: TaskTemplate[] = [];
   selectedTemplateId: number | null = null;
   templateFields: TemplateField[] = [];
+  taskData: { fieldId: number; fieldValue: string }[] = [];
   taskForm: FormGroup;
   statuses = TaskStatuses;
   loading = false;
@@ -107,8 +108,19 @@ export class TaskEditComponent implements OnInit {
         });
 
         this.selectedTemplateId = data.task.templateId;
-        this.loadTemplateFields(data.task.templateId);
-        this.loading = false;
+        this.taskData = data.taskData || [];
+        
+        this.templateService.getFields(data.task.templateId).subscribe({
+          next: (fields) => {
+            this.templateFields = fields;
+            this.loadingFields = false;
+            this.loading = false;
+          },
+          error: () => {
+            this.loadingFields = false;
+            this.loading = false;
+          }
+        });
       },
       error: () => {
         this.loading = false;

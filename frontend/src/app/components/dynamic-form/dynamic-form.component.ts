@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ValidatorFn, AbstractControl } from '@angular/forms';
 import { FieldConfig, TemplateField } from '../../models';
 
@@ -7,7 +7,7 @@ import { FieldConfig, TemplateField } from '../../models';
   templateUrl: './dynamic-form.component.html',
   styleUrls: ['./dynamic-form.component.scss']
 })
-export class DynamicFormComponent implements OnInit {
+export class DynamicFormComponent implements OnInit, OnChanges {
   @Input() fields: TemplateField[] = [];
   @Input() initialValues: { fieldId: number; fieldValue: string }[] = [];
   
@@ -22,10 +22,22 @@ export class DynamicFormComponent implements OnInit {
     this.buildForm();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['fields'] || changes['initialValues']) {
+      this.buildForm();
+    }
+  }
+
   private buildForm(): void {
+    if (!this.fields || this.fields.length === 0) {
+      this.fieldConfigs = [];
+      this.formGroup = this.fb.group({});
+      return;
+    }
+
     const group: { [key: string]: any } = {};
     
-    this.fieldConfigs = this.fields.map((field, index) => {
+    this.fieldConfigs = this.fields.map((field) => {
       let options: string[] = [];
       if (field.options && field.fieldType === 'select') {
         try {
