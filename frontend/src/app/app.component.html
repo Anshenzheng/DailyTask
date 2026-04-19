@@ -1,0 +1,12 @@
+<mat-toolbar color="primary" class="toolbar">
+  <span>{{ title }}</span>
+  <span class="spacer"></span>
+  <button mat-button routerLink="/templates" routerLinkActive="active">
+    <mat-icon>library_books</mat-icon> 模板管理
+  </button>
+  <button mat-button routerLink="/tasks" routerLinkActive="active">
+    <mat-icon>assignment</mat-icon> 任务管理
+  </button>
+</mat-toolbar>
+
+<router-outlet></router-outlet>

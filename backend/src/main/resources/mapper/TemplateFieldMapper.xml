@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dailytask.mapper.TemplateFieldMapper">
+    <resultMap id="TemplateFieldResultMap" type="com.dailytask.entity.TemplateField">
+        <id property="id" column="id"/>
+        <result property="templateId" column="template_id"/>
+        <result property="fieldName" column="field_name"/>
+        <result property="fieldLabel" column="field_label"/>
+        <result property="fieldType" column="field_type"/>
+        <result property="maxLength" column="max_length"/>
+        <result property="required" column="required"/>
+        <result property="sortOrder" column="sort_order"/>
+        <result property="defaultValue" column="default_value"/>
+        <result property="options" column="options"/>
+    </resultMap>
+
+    <select id="findByTemplateId" resultMap="TemplateFieldResultMap">
+        SELECT id, template_id, field_name, field_label, field_type, max_length, 
+               required, sort_order, default_value, options
+        FROM template_field
+        WHERE template_id = #{templateId}
+        ORDER BY sort_order
+    </select>
+
+    <select id="findById" resultMap="TemplateFieldResultMap">
+        SELECT id, template_id, field_name, field_label, field_type, max_length, 
+               required, sort_order, default_value, options
+        FROM template_field
+        WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO template_field (template_id, field_name, field_label, field_type, 
+                                    max_length, required, sort_order, default_value, options)
+        VALUES (#{templateId}, #{fieldName}, #{fieldLabel}, #{fieldType}, 
+                #{maxLength}, #{required}, #{sortOrder}, #{defaultValue}, #{options})
+    </insert>
+
+    <update id="update">
+        UPDATE template_field
+        SET field_name = #{fieldName},
+            field_label = #{fieldLabel},
+            field_type = #{fieldType},
+            max_length = #{maxLength},
+            required = #{required},
+            sort_order = #{sortOrder},
+            default_value = #{defaultValue},
+            options = #{options}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM template_field WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByTemplateId">
+        DELETE FROM template_field WHERE template_id = #{templateId}
+    </delete>
+</mapper>
