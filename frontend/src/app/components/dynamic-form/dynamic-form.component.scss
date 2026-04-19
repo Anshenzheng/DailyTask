@@ -1,0 +1,15 @@
+.dynamic-form {
+  width: 100%;
+}
+
+.form-field-wrapper {
+  margin-bottom: 16px;
+}
+
+.checkbox-wrapper {
+  padding: 8px 0;
+}
+
+::ng-deep .mat-form-field {
+  width: 100%;
+}
