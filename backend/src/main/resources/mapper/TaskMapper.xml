@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dailytask.mapper.TaskMapper">
+    <resultMap id="TaskResultMap" type="com.dailytask.entity.Task">
+        <id property="id" column="id"/>
+        <result property="templateId" column="template_id"/>
+        <result property="title" column="title"/>
+        <result property="status" column="status"/>
+        <result property="progress" column="progress"/>
+        <result property="dueDate" column="due_date"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="TaskResultMap">
+        SELECT id, template_id, title, status, progress, due_date, created_at, updated_at
+        FROM task
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByTemplateId" resultMap="TaskResultMap">
+        SELECT id, template_id, title, status, progress, due_date, created_at, updated_at
+        FROM task
+        WHERE template_id = #{templateId}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findByStatus" resultMap="TaskResultMap">
+        SELECT id, template_id, title, status, progress, due_date, created_at, updated_at
+        FROM task
+        WHERE status = #{status}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="findById" resultMap="TaskResultMap">
+        SELECT id, template_id, title, status, progress, due_date, created_at, updated_at
+        FROM task
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByFilter" resultMap="TaskResultMap">
+        SELECT id, template_id, title, status, progress, due_date, created_at, updated_at
+        FROM task
+        WHERE 1=1
+            <if test="templateId != null">
+                AND template_id = #{templateId}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="keyword != null and keyword != ''">
+                AND (title LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO task (template_id, title, status, progress, due_date, created_at, updated_at)
+        VALUES (#{templateId}, #{title}, #{status}, #{progress}, #{dueDate}, NOW(), NOW())
+    </insert>
+
+    <update id="update">
+        UPDATE task
+        SET template_id = #{templateId},
+            title = #{title},
+            status = #{status},
+            progress = #{progress},
+            due_date = #{dueDate},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM task WHERE id = #{id}
+    </delete>
+</mapper>
