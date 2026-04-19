@@ -1,0 +1,48 @@
+.section-divider {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 24px 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+
+  span {
+    font-weight: 500;
+    font-size: 16px;
+  }
+}
+
+.field-editor {
+  border: 1px solid #e0e0e0;
+  padding: 16px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+}
+
+.field-editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.checkbox-row {
+  margin-top: 8px;
+}
+
+.empty-fields {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  border: 1px dashed #e0e0e0;
+  border-radius: 4px;
+  margin: 16px 0;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
