@@ -22,7 +22,6 @@ CREATE TABLE IF NOT EXISTS template_field (
     sort_order INT DEFAULT 0 COMMENT '排序顺序',
     default_value VARCHAR(500) COMMENT '默认值',
     options TEXT COMMENT '选项列表(JSON格式)',
-    PRIMARY KEY (id),
     INDEX idx_template_id (template_id),
     FOREIGN KEY (template_id) REFERENCES task_template(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='模板字段表';
