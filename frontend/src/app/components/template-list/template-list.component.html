@@ -11,15 +11,18 @@
     
     <mat-card-content>
       <div *ngIf="loading" class="loading-container">
-        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+        <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
       </div>
 
       <div *ngIf="!loading && templates.length === 0" class="empty-state">
         <mat-icon>inbox</mat-icon>
         <p>暂无模板，请点击"新建模板"创建</p>
+        <button mat-raised-button color="primary" routerLink="/templates/new">
+          <mat-icon>add</mat-icon> 新建模板
+        </button>
       </div>
 
-      <table mat-table [dataSource]="templates" *ngIf="!loading && templates.length > 0">
+      <table mat-table [dataSource]="dataSource" *ngIf="!loading && templates.length > 0">
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef> ID </th>
           <td mat-cell *matCellDef="let element"> {{element.id}} </td>

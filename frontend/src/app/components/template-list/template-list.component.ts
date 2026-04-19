@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { TaskTemplate } from '../../models';
@@ -11,6 +12,7 @@ import { TemplateService } from '../../services/template.service';
 })
 export class TemplateListComponent implements OnInit {
   templates: TaskTemplate[] = [];
+  dataSource = new MatTableDataSource<TaskTemplate>();
   loading = false;
   displayedColumns: string[] = ['id', 'name', 'description', 'createdAt', 'actions'];
 
@@ -29,6 +31,7 @@ export class TemplateListComponent implements OnInit {
     this.templateService.getAll().subscribe({
       next: (templates) => {
         this.templates = templates;
+        this.dataSource.data = templates;
         this.loading = false;
       },
       error: () => {
