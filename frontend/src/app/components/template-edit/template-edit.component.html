@@ -6,7 +6,7 @@
     <mat-card-content>
       <form [formGroup]="templateForm" (ngSubmit)="onSubmit()">
         <div class="form-row">
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>模板名称</mat-label>
             <input matInput formControlName="name" required maxlength="200">
             <mat-error *ngIf="templateForm.get('name')?.invalid">
@@ -15,7 +15,7 @@
           </mat-form-field>
         </div>
 
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
           <mat-label>模板描述</mat-label>
           <textarea matInput formControlName="description" rows="2" maxlength="500"></textarea>
         </mat-form-field>
@@ -47,18 +47,18 @@
 
             <div [formGroupName]="i">
               <div class="form-row">
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="outline">
                   <mat-label>字段名</mat-label>
                   <input matInput formControlName="fieldName" required>
                 </mat-form-field>
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="outline">
                   <mat-label>显示标签</mat-label>
                   <input matInput formControlName="fieldLabel" required>
                 </mat-form-field>
               </div>
 
               <div class="form-row">
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="outline">
                   <mat-label>字段类型</mat-label>
                   <mat-select formControlName="fieldType">
                     <mat-option *ngFor="let type of fieldTypes" [value]="type.value">
@@ -66,18 +66,18 @@
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="outline">
                   <mat-label>最大长度</mat-label>
                   <input matInput type="number" formControlName="maxLength">
                 </mat-form-field>
               </div>
 
               <div class="form-row">
-                <mat-form-field appearance="fill">
+                <mat-form-field appearance="outline">
                   <mat-label>默认值</mat-label>
                   <input matInput formControlName="defaultValue">
                 </mat-form-field>
-                <mat-form-field appearance="fill" *ngIf="field.get('fieldType')?.value === 'select'">
+                <mat-form-field appearance="outline" *ngIf="field.get('fieldType')?.value === 'select'">
                   <mat-label>选项（逗号分隔）</mat-label>
                   <input matInput formControlName="options" placeholder="选项1,选项2,选项3">
                 </mat-form-field>

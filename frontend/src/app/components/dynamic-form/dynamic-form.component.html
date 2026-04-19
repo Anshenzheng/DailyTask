@@ -1,7 +1,7 @@
 <form [formGroup]="formGroup" class="dynamic-form">
   <div *ngFor="let config of fieldConfigs" class="form-field-wrapper">
     <div [ngSwitch]="config.fieldType">
-      <mat-form-field appearance="fill" *ngSwitchCase="'text'">
+      <mat-form-field appearance="outline" *ngSwitchCase="'text'">
         <mat-label>{{ config.fieldLabel }}<span *ngIf="config.required"> *</span></mat-label>
         <input 
           matInput 
@@ -11,7 +11,7 @@
         <mat-error *ngIf="!isFieldValid(config.id)">{{ getErrorMessage(config) }}</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="fill" *ngSwitchCase="'textarea'">
+      <mat-form-field appearance="outline" *ngSwitchCase="'textarea'">
         <mat-label>{{ config.fieldLabel }}<span *ngIf="config.required"> *</span></mat-label>
         <textarea 
           matInput 
@@ -22,7 +22,7 @@
         <mat-error *ngIf="!isFieldValid(config.id)">{{ getErrorMessage(config) }}</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="fill" *ngSwitchCase="'number'">
+      <mat-form-field appearance="outline" *ngSwitchCase="'number'">
         <mat-label>{{ config.fieldLabel }}<span *ngIf="config.required"> *</span></mat-label>
         <input 
           matInput 
@@ -32,7 +32,7 @@
         <mat-error *ngIf="!isFieldValid(config.id)">{{ getErrorMessage(config) }}</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="fill" *ngSwitchCase="'date'">
+      <mat-form-field appearance="outline" *ngSwitchCase="'date'">
         <mat-label>{{ config.fieldLabel }}<span *ngIf="config.required"> *</span></mat-label>
         <input 
           matInput 
@@ -44,7 +44,7 @@
         <mat-error *ngIf="!isFieldValid(config.id)">{{ getErrorMessage(config) }}</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="fill" *ngSwitchCase="'select'">
+      <mat-form-field appearance="outline" *ngSwitchCase="'select'">
         <mat-label>{{ config.fieldLabel }}<span *ngIf="config.required"> *</span></mat-label>
         <mat-select [formControlName]="'field_' + config.id">
           <mat-option *ngFor="let option of config.options" [value]="option">
